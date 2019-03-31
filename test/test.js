@@ -28,6 +28,7 @@ describe('DB', function () {
     }
 
     const xx = new XX()
+
     xx.request()
       .then((res) => {
         assert.equal(res.res.msg, 'hello world')
@@ -118,13 +119,14 @@ describe('DB', function () {
         this.plugin('options', (options) => {
           // modify options，后面的覆盖前面的
           options.flag = false
-          return options 
+          return options
         })
         this.plugin('options', (options) => {
           options.url = 'you://hello'
           return options
         })
         this.plugin('endpoint', (options) => {
+          // console.log(options)
           // init
           assert.equal(options.init, true)
           // merge
@@ -182,7 +184,8 @@ describe('DB', function () {
       .then((res) => {
         assert.equal(res.res.msg, 'hello world')
         return cc.request({ type: 1 })
-      }).then((res) => {
+      })
+      .then((res) => {
         done(new Error('不应该进入正确回调，应当进入失败回调，因为retcode为1'))
       }, (res) => {
         assert.equal(res.retcode, 1)
@@ -195,6 +198,7 @@ describe('DB', function () {
     class ZZ extends DB {
       constructor(options) {
         super(options)
+
         this.plugin('endpoint', function () {
           return new Promise((resolve, reject) => {
             reject()
@@ -213,3 +217,4 @@ describe('DB', function () {
       })
   })
 })
+
